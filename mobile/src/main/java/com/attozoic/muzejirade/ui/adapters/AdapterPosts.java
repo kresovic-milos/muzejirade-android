@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
+import com.attozoic.muzejirade.utils.HtmlUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -43,15 +44,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
 
         Glide.with(holder.featuredIV.getContext()).load(post.getFeaturedImageUrl()).into(holder.featuredIV);
 
-        holder.titleTV.setText(post.getTitle().getRendered());
-
-//        String htmlExcerpt = post.getExcerpt().getRendered();
-//
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-//            holder.titleTV.setText(Html.fromHtml(htmlExcerpt, Html.FROM_HTML_MODE_COMPACT));
-//        } else {
-//            holder.titleTV.setText(Html.fromHtml(htmlExcerpt));
-//        }
+        holder.titleTV.setText(HtmlUtils.htmlToSpanned(post.getTitle().getRendered()));
 
     }
 
