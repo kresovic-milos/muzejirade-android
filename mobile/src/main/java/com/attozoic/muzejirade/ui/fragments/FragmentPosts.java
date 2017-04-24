@@ -29,9 +29,19 @@ import retrofit2.Response;
 
 public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private AdapterPosts adapterPosts;
+
+    private static FragmentPosts instance;
+
+    public static FragmentPosts getInstance() {
+        if (instance == null) {
+            instance = new FragmentPosts();
+        }
+        return instance;
+    }
 
     @Nullable
     @Override
