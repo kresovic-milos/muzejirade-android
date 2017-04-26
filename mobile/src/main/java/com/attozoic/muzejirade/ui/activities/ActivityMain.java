@@ -4,16 +4,21 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.ui.fragments.FragmentPosts;
+
+import static com.attozoic.muzejirade.R.id.imageView;
 
 public class ActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -103,9 +108,20 @@ public class ActivityMain extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void goTo(Fragment fragment) {
+    public void goTo(Fragment fragment) {
+        goTo(fragment, false, null);
+    }
+
+    public void goTo(Fragment fragment, boolean addToBackStack, RelativeLayout relativeLayout) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        int containerId = R.id.framelayout_main;
+
         if (fragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_main, fragment).commit();
+            if (addToBackStack) {
+                transaction.add(containerId, fragment).addToBackStack(null).addSharedElement(relativeLayout, ViewCompat.getTransitionName(relativeLayout)).commit();
+            } else {
+                transaction.replace(containerId, fragment).commit();
+            }
         }
     }
 }
