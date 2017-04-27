@@ -3,6 +3,7 @@ package com.attozoic.muzejirade.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.attozoic.muzejirade.R.id.imageView;
+
 /**
  * Created by Kresa on 4/10/17.
  */
@@ -36,13 +39,10 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private EndlessRecyclerViewScrollListener scrollListener;
 
     private AdapterPosts adapterPosts;
 
     private static FragmentPosts instance;
-
-
 
     public static FragmentPosts getInstance() {
         if (instance == null) {
@@ -60,18 +60,9 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(this);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         RecyclerView recyclerViewMain = (RecyclerView) view.findViewById(R.id.recyclerview_posts);
-        recyclerViewMain.setLayoutManager(llm);
-        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                loadNextDataFromApi(page);
-            }
-        };
+        recyclerViewMain.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         adapterPosts = new AdapterPosts(new OnItemClickListener() {
             @Override
             public void onItemClick(Object item, View sharedElement) {
@@ -79,13 +70,20 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
             }
         });
         recyclerViewMain.setAdapter(adapterPosts);
-        recyclerViewMain.addOnScrollListener(scrollListener);
+        recyclerViewMain.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) recyclerViewMain.getLayoutManager()) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                getPosts(page);
+
+                if (page == 1) {
+                    this.resetState();
+                }
+            }
+        });
 
         return view;
-    }
-
-    private void loadNextDataFromApi(int page) {
-       getPosts(page);
     }
 
     @Override
@@ -95,8 +93,8 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     private void refresh() {
-            swipeRefreshLayout.setRefreshing(true);
-            getPosts(1);
+        swipeRefreshLayout.setRefreshing(true);
+        getPosts(1);
     }
 
     private void getPosts(final int page) {
@@ -105,12 +103,9 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 Log.d("BlaBla", "onResponse " + response);
-                if(page == 1) {
-                   adapterPosts.setPosts(response.body());
+                boolean shouldClear = page == 1;
+                adapterPosts.update(response.body(), shouldClear);
 
-                }else{
-                    adapterPosts.update(response.body());
-                }
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -133,6 +128,8 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     public void openPostDetails(Post post, RelativeLayout relativeLayout) {
         Intent intent = new Intent(getActivity(), ActivityPost.class);
         intent.putExtra("post", Parcels.wrap(post));
-        startActivity(intent);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), relativeLayout, "post");
+        startActivity(intent, options.toBundle());
     }
 }

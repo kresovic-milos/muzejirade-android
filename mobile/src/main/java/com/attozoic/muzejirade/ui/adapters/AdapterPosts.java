@@ -77,13 +77,11 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
         }
     }
 
-    public void update(List<Post> newPosts) {
-
+    public void update(List<Post> newPosts, boolean shouldClear) {
+        if (shouldClear) {
+            posts.clear();
+        }
         posts.addAll(newPosts);
         notifyDataSetChanged();
-    }
-    public void setPosts(List<Post> newPosts) {
-        posts.clear();
-        update(newPosts);
     }
 }

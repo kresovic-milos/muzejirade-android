@@ -64,6 +64,6 @@ public class Post extends BaseEntity {
 
     public String getFeaturedImageUrl() {
         String baseUrl = embedded.getFeaturedMedia().get(0).getSourceUrl();
-        return new StringBuilder(baseUrl).insert(baseUrl.length() - 4, "-400x250").toString();
+        return baseUrl;//new StringBuilder(baseUrl).insert(baseUrl.length() - 4, "-225x136").toString();
     }
 }

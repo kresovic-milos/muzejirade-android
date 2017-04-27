@@ -10,20 +10,22 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
+        <com.attozoic.muzejirade.views.SquareImageView
             android:id="@+id/imageview_post"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:scaleType="fitXY" />
+            android:layout_height="0dp"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/textview_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageview_post"
+            android:layout_alignBottom="@id/imageview_post"
             android:gravity="center_horizontal"
-            android:padding="5dp"
+            android:padding="10dp"
             android:textSize="24sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/bg_transparent_black_gradient"
             android:textStyle="bold" />
 
         <WebView
@@ -32,7 +34,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:layout_below="@id/textview_title"/>
+            android:layout_below="@id/imageview_post"/>
 
     </RelativeLayout>
 </ScrollView>
