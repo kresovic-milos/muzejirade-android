@@ -12,9 +12,8 @@ import android.widget.TextView;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
+import com.attozoic.muzejirade.utils.HtmlUtils;
 import com.bumptech.glide.Glide;
-
-import static com.attozoic.muzejirade.R.id.imageView;
 
 /**
  * Created by Kresa on 4/26/17.
@@ -56,6 +55,8 @@ public class FragmentPostDetails extends BaseFragment {
             Glide.with(imageView.getContext()).load(post.getFeaturedImageUrl()).into(imageView);
             TextView titleTV = (TextView) view.findViewById(R.id.textview_title);
             titleTV.setText(post.getTitle().getRendered());
+        TextView cont = (TextView) view.findViewById(R.id.textView_content);
+        cont.setText(HtmlUtils.htmlToSpanned(post.getContent().getRendered()));
 
         return view;
     }
