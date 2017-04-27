@@ -1,9 +1,12 @@
 package com.attozoic.muzejirade.entities;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Kresa on 4/10/17.
  */
 
+@Parcel
 public class Renderable {
 
     private String rendered;

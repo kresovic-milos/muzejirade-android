@@ -4,10 +4,13 @@ import android.widget.ImageView;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Kresa on 4/10/17.
  */
 
+@Parcel
 public class Post extends BaseEntity {
 
     private String id;

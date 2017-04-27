@@ -2,6 +2,7 @@ package com.attozoic.muzejirade.utils;
 
 import android.text.Html;
 import android.text.Spanned;
+import android.view.View;
 
 /**
  * Created by Kresa on 4/14/17.

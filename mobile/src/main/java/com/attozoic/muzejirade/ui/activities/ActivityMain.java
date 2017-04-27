@@ -20,21 +20,15 @@ import com.attozoic.muzejirade.ui.fragments.FragmentPosts;
 
 import static com.attozoic.muzejirade.R.id.imageView;
 
-public class ActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ActivityMain extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpActionBar(getResources().getString(R.string.app_name));
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.framelayout_main, FragmentPosts.getInstance()).commit();
-
+        goTo(FragmentPosts.getInstance());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -106,22 +100,5 @@ public class ActivityMain extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void goTo(Fragment fragment) {
-        goTo(fragment, false, null);
-    }
-
-    public void goTo(Fragment fragment, boolean addToBackStack, RelativeLayout relativeLayout) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        int containerId = R.id.framelayout_main;
-
-        if (fragment != null) {
-            if (addToBackStack) {
-                transaction.add(containerId, fragment).addToBackStack(null).addSharedElement(relativeLayout, ViewCompat.getTransitionName(relativeLayout)).commit();
-            } else {
-                transaction.replace(containerId, fragment).commit();
-            }
-        }
     }
 }

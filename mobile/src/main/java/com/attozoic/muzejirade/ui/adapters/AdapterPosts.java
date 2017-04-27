@@ -27,7 +27,7 @@ import static android.media.CamcorderProfile.get;
 
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHolder> {
 
-    List<Post> posts;
+    private List<Post> posts;
     private OnItemClickListener onItemClickListener;
 
     public AdapterPosts(OnItemClickListener onItemClickListener) {

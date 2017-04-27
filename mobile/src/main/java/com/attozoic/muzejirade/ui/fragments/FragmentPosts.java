@@ -17,8 +17,11 @@ import com.attozoic.muzejirade.entities.Post;
 import com.attozoic.muzejirade.networking.ApiServices;
 import com.attozoic.muzejirade.networking.PostsService;
 import com.attozoic.muzejirade.ui.activities.ActivityMain;
+import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.ui.adapters.AdapterPosts;
 import com.attozoic.muzejirade.utils.OnItemClickListener;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,8 +110,8 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void openPostDetails(Post post, RelativeLayout relativeLayout) {
-        if (getActivity() != null) {
-            ((ActivityMain) getActivity()).goTo(FragmentPostDetails.getInstance(post), true, relativeLayout);
-        }
+        Intent intent = new Intent(getActivity(), ActivityPost.class);
+        intent.putExtra("post", Parcels.wrap(post));
+        startActivity(intent);
     }
 }

@@ -26,14 +26,13 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView_content"
+        <WebView
+            android:id="@+id/webView_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:padding="15dp"
-            android:layout_below="@id/textview_title"
-            android:text="TextView" />
+            android:layout_below="@id/textview_title"/>
 
     </RelativeLayout>
 </ScrollView>
