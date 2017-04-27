@@ -15,15 +15,13 @@ import android.widget.RelativeLayout;
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
 import com.attozoic.muzejirade.networking.ApiServices;
-import com.attozoic.muzejirade.networking.PostsService;
-import com.attozoic.muzejirade.ui.activities.ActivityMain;
 import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.ui.adapters.AdapterPosts;
+import com.attozoic.muzejirade.utils.EndlessRecyclerViewScrollListener;
 import com.attozoic.muzejirade.utils.OnItemClickListener;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,14 +36,18 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private AdapterPosts adapterPosts;
 
     private static FragmentPosts instance;
 
+
+
     public static FragmentPosts getInstance() {
         if (instance == null) {
             instance = new FragmentPosts();
+
         }
         return instance;
     }
@@ -58,9 +60,18 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         RecyclerView recyclerViewMain = (RecyclerView) view.findViewById(R.id.recyclerview_posts);
-        recyclerViewMain.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewMain.setLayoutManager(llm);
+        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
         adapterPosts = new AdapterPosts(new OnItemClickListener() {
             @Override
             public void onItemClick(Object item, View sharedElement) {
@@ -68,8 +79,13 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
             }
         });
         recyclerViewMain.setAdapter(adapterPosts);
+        recyclerViewMain.addOnScrollListener(scrollListener);
 
         return view;
+    }
+
+    private void loadNextDataFromApi(int page) {
+       getPosts(page);
     }
 
     @Override
@@ -80,16 +96,21 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
     private void refresh() {
             swipeRefreshLayout.setRefreshing(true);
-            getPosts();
+            getPosts(1);
     }
 
-    private void getPosts() {
+    private void getPosts(final int page) {
         Log.d("BlaBla", "getPosts");
-        ApiServices.getPostService().getPosts().enqueue(new Callback<List<Post>>() {
+        ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 Log.d("BlaBla", "onResponse " + response);
-                adapterPosts.update(response.body());
+                if(page == 1) {
+                   adapterPosts.setPosts(response.body());
+
+                }else{
+                    adapterPosts.update(response.body());
+                }
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -106,7 +127,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        getPosts();
+        getPosts(1);
     }
 
     public void openPostDetails(Post post, RelativeLayout relativeLayout) {

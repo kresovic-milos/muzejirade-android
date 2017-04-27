@@ -2,7 +2,6 @@ package com.attozoic.muzejirade.ui.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.media.CamcorderProfile.get;
 
 /**
  * Created by Kresa on 4/10/17.
@@ -81,8 +78,12 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
     }
 
     public void update(List<Post> newPosts) {
-        posts.clear();
+
         posts.addAll(newPosts);
         notifyDataSetChanged();
+    }
+    public void setPosts(List<Post> newPosts) {
+        posts.clear();
+        update(newPosts);
     }
 }
