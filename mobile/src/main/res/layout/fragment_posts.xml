@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swiperefreshlayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_posts"
-        android:padding="5dp"
+    <ImageView
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:src="@drawable/last_news"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+
+        android:id="@+id/swiperefreshlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_posts"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

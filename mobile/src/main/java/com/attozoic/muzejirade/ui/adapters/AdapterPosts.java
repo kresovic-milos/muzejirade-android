@@ -47,11 +47,12 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
         Glide.with(holder.featuredIV.getContext()).load(post.getFeaturedImageUrl()).into(holder.featuredIV);
 
         holder.titleTV.setText(HtmlUtils.htmlToSpanned(post.getTitle().getRendered()));
+        holder.categoryTV.setText(post.getCategory().getName());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClick(post, holder.relativeLayout);
+                onItemClickListener.onItemClick(post, holder.featuredIV);
             }
         });
 
@@ -64,16 +65,16 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
 
     class PostViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
-        private RelativeLayout relativeLayout;
         private ImageView featuredIV;
         private TextView titleTV;
+        private TextView categoryTV;
 
         public PostViewHolder(View rootView) {
             super(rootView);
             cardView = (CardView) rootView.findViewById(R.id.cardview_post);
-            relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relativelayout_post);
             featuredIV = (ImageView) rootView.findViewById(R.id.imageview_post);
             titleTV = (TextView) rootView.findViewById(R.id.textview_title);
+            categoryTV = (TextView) rootView.findViewById(R.id.textview_category);
         }
     }
 

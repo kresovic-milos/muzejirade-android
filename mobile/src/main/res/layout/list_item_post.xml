@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -18,21 +19,41 @@
         <RelativeLayout
             android:id="@+id/relativelayout_post"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:transitionName="@string/post_item_transition">
+            android:layout_height="wrap_content">
 
             <com.attozoic.muzejirade.views.SquareImageView
                 android:id="@+id/imageview_post"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                tools:targetApi="lollipop"
+                android:transitionName="@string/post_item_transition"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"/>
 
             <TextView
-                android:padding="10dp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:background="@color/colorAccent"
+                android:layout_alignTop="@id/imageview_post"
+                android:id="@+id/textview_category"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
                 android:textStyle="bold"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
                 android:background="@drawable/bg_transparent_black_gradient"
                 android:layout_alignBottom="@id/imageview_post"
                 android:id="@+id/textview_title"

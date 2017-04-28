@@ -50,12 +50,6 @@ public class FragmentPostDetails extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
 
-
-        ImageView imageView = (ImageView) view.findViewById(R.id.imageview_post);
-        Glide.with(imageView.getContext()).load(getPost().getFeaturedImageUrl()).into(imageView);
-        TextView titleTV = (TextView) view.findViewById(R.id.textview_title);
-        titleTV.setText(getPost().getTitle().getRendered());
-
         WebView webView = (WebView) view.findViewById(R.id.webView_content);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);

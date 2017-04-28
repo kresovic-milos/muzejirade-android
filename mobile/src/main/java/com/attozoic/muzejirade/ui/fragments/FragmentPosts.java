@@ -1,6 +1,7 @@
 package com.attozoic.muzejirade.ui.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -66,7 +67,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
         adapterPosts = new AdapterPosts(new OnItemClickListener() {
             @Override
             public void onItemClick(Object item, View sharedElement) {
-                openPostDetails((Post) item, (RelativeLayout) sharedElement);
+                openPostDetails((Post) item, sharedElement);
             }
         });
         recyclerViewMain.setAdapter(adapterPosts);
@@ -125,11 +126,15 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
         getPosts(1);
     }
 
-    public void openPostDetails(Post post, RelativeLayout relativeLayout) {
+    public void openPostDetails(Post post, View sharedElement) {
         Intent intent = new Intent(getActivity(), ActivityPost.class);
         intent.putExtra("post", Parcels.wrap(post));
 
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), relativeLayout, "post");
-        startActivity(intent, options.toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedElement, getString(R.string.post_item_transition));
+            getActivity().startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 }
