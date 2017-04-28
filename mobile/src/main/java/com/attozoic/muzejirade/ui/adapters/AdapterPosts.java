@@ -14,6 +14,7 @@ import com.attozoic.muzejirade.entities.Post;
 import com.attozoic.muzejirade.utils.HtmlUtils;
 import com.attozoic.muzejirade.utils.OnItemClickListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.PostViewHold
 
         final Post post = posts.get(position);
 
-        Glide.with(holder.featuredIV.getContext()).load(post.getFeaturedImageUrl()).into(holder.featuredIV);
+        Glide.with(holder.featuredIV.getContext()).load(post.getFeaturedImageUrl()).dontAnimate().dontTransform().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.featuredIV);
 
         holder.titleTV.setText(HtmlUtils.htmlToSpanned(post.getTitle().getRendered()));
         holder.categoryTV.setText(post.getCategory().getName());

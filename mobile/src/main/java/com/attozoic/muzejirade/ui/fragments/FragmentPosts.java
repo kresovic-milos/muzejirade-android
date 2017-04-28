@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -131,7 +132,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
         intent.putExtra("post", Parcels.wrap(post));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedElement, getString(R.string.post_item_transition));
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedElement, ViewCompat.getTransitionName(sharedElement));
             getActivity().startActivity(intent, options.toBundle());
         } else {
             startActivity(intent);
