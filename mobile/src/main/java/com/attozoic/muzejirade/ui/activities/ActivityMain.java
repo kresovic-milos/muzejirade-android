@@ -3,30 +3,27 @@ package com.attozoic.muzejirade.ui.activities;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.ui.fragments.FragmentPosts;
 
-import static com.attozoic.muzejirade.R.id.imageView;
-
 public class ActivityMain extends ToolbarActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpActionBar(getResources().getString(R.string.app_name));
+
+
 
         goTo(FragmentPosts.getInstance());
 
@@ -38,6 +35,7 @@ public class ActivityMain extends ToolbarActivity implements NavigationView.OnNa
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
     @Override
     public void onBackPressed() {

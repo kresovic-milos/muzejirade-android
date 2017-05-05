@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
@@ -22,6 +21,7 @@ import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.ui.adapters.AdapterPosts;
 import com.attozoic.muzejirade.utils.EndlessRecyclerViewScrollListener;
 import com.attozoic.muzejirade.utils.OnItemClickListener;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.parceler.Parcels;
 
@@ -30,8 +30,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.attozoic.muzejirade.R.id.imageView;
 
 /**
  * Created by Kresa on 4/10/17.
@@ -45,10 +43,15 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     private AdapterPosts adapterPosts;
 
     private static FragmentPosts instance;
+    CircularProgressView progressView;
+
+
+
 
     public static FragmentPosts getInstance() {
         if (instance == null) {
             instance = new FragmentPosts();
+
 
         }
         return instance;
@@ -59,12 +62,16 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_posts, container, false);
+        progressView = (CircularProgressView) view.findViewById(R.id.progress_view);
+
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         RecyclerView recyclerViewMain = (RecyclerView) view.findViewById(R.id.recyclerview_posts);
         recyclerViewMain.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+
         adapterPosts = new AdapterPosts(new OnItemClickListener() {
             @Override
             public void onItemClick(Object item, View sharedElement) {
@@ -77,11 +84,14 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                getPosts(page);
+                progressView.startAnimation();
+                progressView.setVisibility(View.VISIBLE);
+                    getPosts(page);
 
-                if (page == 1) {
-                    this.resetState();
-                }
+                    if (page == 1) {
+                        this.resetState();
+                    }
+
             }
         });
 
@@ -100,31 +110,36 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     private void getPosts(final int page) {
-        Log.d("BlaBla", "getPosts");
-        ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
-            @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                Log.d("BlaBla", "onResponse " + response);
-                boolean shouldClear = page == 1;
-                adapterPosts.update(response.body(), shouldClear);
 
-                swipeRefreshLayout.setRefreshing(false);
-            }
+            Log.d("BlaBla", "getPosts");
+            ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
+                @Override
+                public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                    Log.d("BlaBla", "onResponse " + response);
+                    boolean shouldClear = page == 1;
+                    adapterPosts.update(response.body(), shouldClear);
 
-            @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                Log.d("BlaBla", "onFailiure");
-                t.printStackTrace();
+                    swipeRefreshLayout.setRefreshing(false);
+                    progressView.setVisibility(View.INVISIBLE);
+                }
 
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Post>> call, Throwable t) {
+                    Log.d("BlaBla", "onFailiure");
+                    t.printStackTrace();
+
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+
 
     }
 
     @Override
     public void onRefresh() {
-        getPosts(1);
+
+            getPosts(1);
+
     }
 
     public void openPostDetails(Post post, View sharedElement) {
