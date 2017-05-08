@@ -2,6 +2,8 @@ package com.attozoic.muzejirade.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.attozoic.muzejirade.R;
@@ -11,8 +13,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 
 import org.parceler.Parcels;
@@ -30,11 +30,12 @@ public class ActivityPost extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
-        setUpActionBar(post.getTitle().getRendered());
+        setUpActionBar("", "naslov");
+        setUpAppBar(post.getCategory().getName());
 
         supportPostponeEnterTransition();
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageview_post);
+        final ImageView imageView = (ImageView) findViewById(R.id.imageview_post);
         Glide.with(imageView.getContext()).load(getPost().getFeaturedImageUrl()).dontAnimate().dontTransform()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
             @Override
@@ -46,6 +47,7 @@ public class ActivityPost extends ToolbarActivity {
             @Override
             public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                 supportStartPostponedEnterTransition();
+//                Glide.with(imageView.getContext()).load(getPost().getFeaturedImageUrl()).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
                 return false;
             }
         }).into(imageView);
@@ -57,5 +59,28 @@ public class ActivityPost extends ToolbarActivity {
 
     public Post getPost() {
         return post;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_post_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_comment) {
+            //TODO open comments fragment
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

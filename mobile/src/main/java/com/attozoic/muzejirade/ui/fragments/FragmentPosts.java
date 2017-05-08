@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
@@ -30,8 +29,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.attozoic.muzejirade.R.id.imageView;
 
 /**
  * Created by Kresa on 4/10/17.

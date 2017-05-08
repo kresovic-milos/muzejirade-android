@@ -62,9 +62,13 @@ public class Post extends BaseEntity {
         this.embedded = embedded;
     }
 
-    public String getFeaturedImageUrl() {
+    public String getThumbnail() {
         String baseUrl = embedded.getFeaturedMedia().get(0).getSourceUrl();
-        return baseUrl;//new StringBuilder(baseUrl).insert(baseUrl.length() - 4, "-225x136").toString();
+        return new StringBuilder(baseUrl).insert(baseUrl.length() - 4, "-150x150").toString();
+    }
+
+    public String getFeaturedImageUrl() {
+        return embedded.getFeaturedMedia().get(0).getSourceUrl();
     }
 
     public Category getCategory() {
