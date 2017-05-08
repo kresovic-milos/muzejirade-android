@@ -1,54 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:baselineAligned="false">
-
-
-
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/djoka"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:src="@drawable/last_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-
-
     <android.support.v4.widget.SwipeRefreshLayout
 
         android:id="@+id/swiperefreshlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/djoka">
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_posts"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
-
-
     </android.support.v4.widget.SwipeRefreshLayout>
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/progress_view"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        app:cpv_indeterminate="true"
-        app:cpv_animDuration="4000"
-
-
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
-
-
-
-</RelativeLayout>
+</LinearLayout>
