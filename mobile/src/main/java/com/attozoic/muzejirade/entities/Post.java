@@ -68,7 +68,11 @@ public class Post extends BaseEntity {
     }
 
     public String getFeaturedImageUrl() {
-        return embedded.getFeaturedMedia().get(0).getSourceUrl();
+        if (embedded.getFeaturedMedia() != null) {
+            return embedded.getFeaturedMedia().get(0).getSourceUrl();
+        } else {
+            return "https://scontent.fbeg4-1.fna.fbcdn.net/v/t1.0-9/12744604_1759380070951777_5851446205285844878_n.jpg?oh=f97be9bd0e94c643863cad2707cc379f&oe=59B27FF1";
+        }
     }
 
     public Category getCategory() {
