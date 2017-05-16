@@ -1,9 +1,5 @@
 package com.attozoic.muzejirade.entities;
 
-import android.widget.ImageView;
-
-import com.google.gson.annotations.SerializedName;
-
 import org.parceler.Parcel;
 
 /**
@@ -13,69 +9,79 @@ import org.parceler.Parcel;
 @Parcel
 public class Post extends BaseEntity {
 
-    private String id;
-    private Renderable title;
-    private Renderable content;
-    private Renderable excerpt;
-    @SerializedName("_embedded")
-    private Embedded embedded;
+    private int id;
+    private String title;
+    private String content;
+    private Author author;
+    private String mainImageUrl;
+    private String thumbnailUrl;
+    private Category category;
+    private String createdAt;
 
-    private String featuredImageUrl;
+    public Post() {
+    }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Renderable getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(Renderable renderable) {
-        this.title = renderable;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Renderable getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(Renderable content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public Renderable getExcerpt() {
-        return excerpt;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setExcerpt(Renderable excerpt) {
-        this.excerpt = excerpt;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
-    public Embedded getEmbedded() {
-        return embedded;
+    public String getMainImageUrl() {
+        return mainImageUrl;
     }
 
-    public void setEmbedded(Embedded embedded) {
-        this.embedded = embedded;
+    public void setMainImageUrl(String mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
     }
 
-    public String getThumbnail() {
-        String baseUrl = embedded.getFeaturedMedia().get(0).getSourceUrl();
-        return new StringBuilder(baseUrl).insert(baseUrl.length() - 4, "-150x150").toString();
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 
-    public String getFeaturedImageUrl() {
-        if (embedded.getFeaturedMedia() != null) {
-            return embedded.getFeaturedMedia().get(0).getSourceUrl();
-        } else {
-            return "https://scontent.fbeg4-1.fna.fbcdn.net/v/t1.0-9/12744604_1759380070951777_5851446205285844878_n.jpg?oh=f97be9bd0e94c643863cad2707cc379f&oe=59B27FF1";
-        }
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public Category getCategory() {
-        return embedded.getTerm().get(0).get(0);
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

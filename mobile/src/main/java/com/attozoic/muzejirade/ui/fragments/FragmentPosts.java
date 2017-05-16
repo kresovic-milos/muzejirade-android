@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
-import com.attozoic.muzejirade.networking.ApiServices;
+import com.attozoic.muzejirade.networking.FirebaseDatabaseListener;
+import com.attozoic.muzejirade.networking.PostsServiceFirebase;
 import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.ui.adapters.AdapterPosts;
 import com.attozoic.muzejirade.utils.EndlessRecyclerViewScrollListener;
@@ -25,10 +26,6 @@ import com.attozoic.muzejirade.utils.OnItemClickListener;
 import org.parceler.Parcels;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Kresa on 4/10/17.
@@ -74,7 +71,8 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                getPosts(page);
+
+                getPosts(((AdapterPosts) view.getAdapter()).getPage());
 
                 if (page == 1) {
                     this.resetState();
@@ -93,35 +91,54 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
 
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        getPosts(1);
+        getPosts(adapterPosts.getPage());
     }
 
-    private void getPosts(final int page) {
+    private void getPosts(final String page) {
         Log.d("BlaBla", "getPosts");
-        ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
+
+        PostsServiceFirebase postsServiceFirebase = new PostsServiceFirebase();
+        postsServiceFirebase.getPosts(page, new FirebaseDatabaseListener() {
             @Override
-            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-                Log.d("BlaBla", "onResponse " + response);
-                boolean shouldClear = page == 1;
-                adapterPosts.update(response.body(), shouldClear);
+            public void onSuccess(Object response) {
+                boolean shouldClear = page == null;
+                adapterPosts.update((List<Post>) response, shouldClear);
 
                 swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(Call<List<Post>> call, Throwable t) {
-                Log.d("BlaBla", "onFailiure");
-                t.printStackTrace();
+            public void onError(String error) {
+                Log.d("BlaBla", "onFailiure " + error);
 
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
+//        ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
+//            @Override
+//            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+//                Log.d("BlaBla", "onResponse " + response);
+//                boolean shouldClear = page == 1;
+//                adapterPosts.update(response.body(), shouldClear);
+//
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Post>> call, Throwable t) {
+//                Log.d("BlaBla", "onFailiure");
+//                t.printStackTrace();
+//
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
+
     }
 
     @Override
     public void onRefresh() {
-        getPosts(1);
+        getPosts(null);
     }
 
     public void openPostDetails(Post post, View sharedElement) {

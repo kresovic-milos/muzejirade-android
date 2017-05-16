@@ -68,9 +68,9 @@ public class AdapterPosts extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 final PostViewHolder holder = (PostViewHolder) viewHolder;
                 final Post post = posts.get(position);
 
-                Glide.with(holder.featuredIV.getContext()).load(post.getFeaturedImageUrl()).dontAnimate().dontTransform().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.featuredIV);
+                Glide.with(holder.featuredIV.getContext()).load(post.getMainImageUrl()).dontAnimate().dontTransform().diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.featuredIV);
 
-                holder.titleTV.setText(HtmlUtils.htmlToSpanned(post.getTitle().getRendered()));
+                holder.titleTV.setText(HtmlUtils.htmlToSpanned(post.getTitle()));
                 holder.categoryTV.setText(post.getCategory().getName());
 
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -133,5 +133,9 @@ public class AdapterPosts extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         hasMore = posts.size() > 0 && posts.size() % 10 == 0;
 
         notifyDataSetChanged();
+    }
+
+    public String getPage() {
+        return posts.isEmpty() ? null : Long.toString(Long.parseLong(posts.get(posts.size() - 1).getCreatedAt()) - 1);
     }
 }

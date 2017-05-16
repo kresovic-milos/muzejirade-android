@@ -12,6 +12,9 @@ public class Category extends BaseEntity {
     private int id;
     private String name;
 
+    public Category() {
+    }
+
     public int getId() {
         return id;
     }

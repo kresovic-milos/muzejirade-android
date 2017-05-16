@@ -61,7 +61,7 @@ public class FragmentPostDetails extends BaseFragment {
         htmlData.append("\n");
         htmlData.append("<body>");
         htmlData.append("\n");
-        htmlData.append(getPost().getContent().getRendered());
+        htmlData.append(getPost().getContent());
         htmlData.append("\n");
 
         StringBuilder scriptData = new StringBuilder("<script>");

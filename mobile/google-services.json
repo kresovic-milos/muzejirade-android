@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "961517114098",
+    "firebase_url": "https://muzeji-rade.firebaseio.com",
+    "project_id": "muzeji-rade",
+    "storage_bucket": "muzeji-rade.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961517114098:android:520011a594cbb7d9",
+        "android_client_info": {
+          "package_name": "com.attozoic.muzejirade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961517114098-vq431qv2onltf2qfin4ot7orifopu1u2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.attozoic.muzejirade",
+            "certificate_hash": "e944dba77eb74cfbf01a04eb15cc6b852a5df649"
+          }
+        },
+        {
+          "client_id": "961517114098-p92079js20g08lvn1anej6e36nj0kfsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrcUWTMZ8VYLgvsrEcKDMt4sgi7S6V7Aw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961517114098-p92079js20g08lvn1anej6e36nj0kfsi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -36,7 +36,7 @@ public class ActivityPost extends ToolbarActivity {
         supportPostponeEnterTransition();
 
         final ImageView imageView = (ImageView) findViewById(R.id.imageview_post);
-        Glide.with(imageView.getContext()).load(getPost().getFeaturedImageUrl()).dontAnimate().dontTransform()
+        Glide.with(imageView.getContext()).load(getPost().getMainImageUrl()).dontAnimate().dontTransform()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
