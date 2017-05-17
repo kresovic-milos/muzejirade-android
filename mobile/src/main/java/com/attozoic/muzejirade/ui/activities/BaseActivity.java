@@ -15,16 +15,16 @@ import com.attozoic.muzejirade.R;
 public class BaseActivity extends AppCompatActivity {
 
     public void goTo(Fragment fragment) {
-        goTo(fragment, false, null);
+        goTo(fragment, false);
     }
 
-    public void goTo(Fragment fragment, boolean addToBackStack, RelativeLayout relativeLayout) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        int containerId = R.id.framelayout_main;
-
+    public void goTo(Fragment fragment, boolean addToBackStack) {
         if (fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            int containerId = R.id.framelayout_main;
+
             if (addToBackStack) {
-                transaction.add(containerId, fragment).addToBackStack(null).addSharedElement(relativeLayout, ViewCompat.getTransitionName(relativeLayout)).commit();
+                transaction.add(containerId, fragment).addToBackStack(null).commit();
             } else {
                 transaction.replace(containerId, fragment).commit();
             }

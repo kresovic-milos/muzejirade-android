@@ -72,22 +72,27 @@ public class ActivityMain extends ToolbarActivity implements NavigationView.OnNa
 
         Fragment fragment = null;
 
-        if (id == R.id.nav_camera) {
+        switch (id) {
+            case R.id.nav_camera:
+                fragment = FragmentPosts.getInstance();
+                goTo(fragment);
+                break;
+            case R.id.nav_about:
+                fragment = AboutFragment.getInstance();
+                goTo(fragment, true);
+                break;
+            case R.id.nav_slideshow:
 
-            fragment = FragmentPosts.getInstance();
-            goTo(fragment);
-        } else if (id == R.id.nav_gallery) {
-            fragment = AboutFragment.getInstance();
-            goTo(fragment,true,null);
+                break;
+            case R.id.nav_manage:
 
-        } else if (id == R.id.nav_slideshow) {
+                break;
+            case R.id.nav_share:
 
-        } else if (id == R.id.nav_manage) {
+                break;
+            case R.id.nav_send:
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+                break;
         }
 
 

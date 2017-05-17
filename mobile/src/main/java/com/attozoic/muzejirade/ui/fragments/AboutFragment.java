@@ -20,9 +20,7 @@ public class AboutFragment extends BaseFragment {
     public static Fragment getInstance() {
         if (instance == null) {
             instance = new AboutFragment();
-
         }
-
 
         return instance;
     }
