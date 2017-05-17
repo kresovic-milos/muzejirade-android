@@ -86,7 +86,7 @@ public class FragmentPostDetails extends BaseFragment {
 
         Log.d("BlaBla", scriptData.toString());
 
-        webView.loadData(htmlData.toString(), "text/html", "UTF-8");
+        webView.loadData(htmlData.toString(), "text/html; charset=utf-8", "UTF-8");
 
         return view;
     }
