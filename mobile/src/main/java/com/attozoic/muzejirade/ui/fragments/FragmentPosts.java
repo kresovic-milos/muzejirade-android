@@ -1,5 +1,6 @@
 package com.attozoic.muzejirade.ui.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,12 +17,12 @@ import android.view.ViewGroup;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
-import com.attozoic.muzejirade.networking.FirebaseDatabaseListener;
-import com.attozoic.muzejirade.networking.PostsServiceFirebase;
+import com.attozoic.muzejirade.repositories.RepositoryPosts;
 import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.ui.adapters.AdapterPosts;
 import com.attozoic.muzejirade.utils.EndlessRecyclerViewScrollListener;
 import com.attozoic.muzejirade.utils.OnItemClickListener;
+import com.attozoic.muzejirade.viewmodel.ViewModelPosts;
 
 import org.parceler.Parcels;
 
@@ -37,6 +38,8 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private AdapterPosts adapterPosts;
+
+    private ViewModelPosts viewModelPosts;
 
     private static FragmentPosts instance;
 
@@ -86,6 +89,15 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        viewModelPosts = ViewModelProviders.of(this).get(ViewModelPosts.class);
+
+        viewModelPosts.getPosts().observe(this, posts -> {
+            adapterPosts.update(posts, swipeRefreshLayout.isRefreshing());
+
+            swipeRefreshLayout.setRefreshing(false);
+        });
+
         refresh();
     }
 
@@ -97,23 +109,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     private void getPosts(final String page) {
         Log.d("BlaBla", "getPosts");
 
-        PostsServiceFirebase postsServiceFirebase = new PostsServiceFirebase();
-        postsServiceFirebase.getPosts(page, new FirebaseDatabaseListener() {
-            @Override
-            public void onSuccess(Object response) {
-                boolean shouldClear = page == null;
-                adapterPosts.update((List<Post>) response, shouldClear);
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("BlaBla", "onFailiure " + error);
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        viewModelPosts.setPage(page);
 
 //        ApiServices.getPostService().getPosts(Integer.toString(page)).enqueue(new Callback<List<Post>>() {
 //            @Override

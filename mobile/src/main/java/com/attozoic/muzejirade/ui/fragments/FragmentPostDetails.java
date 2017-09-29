@@ -4,20 +4,24 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.transition.TransitionInflater;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.webkit.WebViewClient;
 
 import com.attozoic.muzejirade.R;
 import com.attozoic.muzejirade.entities.Post;
 import com.attozoic.muzejirade.ui.activities.ActivityPost;
 import com.attozoic.muzejirade.utils.ScreenUtils;
-import com.bumptech.glide.Glide;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static android.R.id.input;
 
 /**
  * Created by Kresa on 4/26/17.
@@ -26,6 +30,8 @@ import com.bumptech.glide.Glide;
 public class FragmentPostDetails extends BaseFragment {
 
     private static FragmentPostDetails instance;
+
+    private WebView webView;
 
     public static FragmentPostDetails getInstance() {
         if (instance == null) {
@@ -50,45 +56,58 @@ public class FragmentPostDetails extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_post_details, container, false);
 
-        WebView webView = (WebView) view.findViewById(R.id.webView_content);
+        webView = (WebView) view.findViewById(R.id.webView_content);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
-        int widthPixels = ScreenUtils.getWidthPixels(getActivity());
-
-        StringBuilder htmlData = new StringBuilder("<html>");
-        htmlData.append("<head><title>contenttttttttttt</title></head>");
-        htmlData.append("\n");
-        htmlData.append("<body>");
-        htmlData.append("\n");
-        htmlData.append(getPost().getContent());
-        htmlData.append("\n");
-
-        StringBuilder scriptData = new StringBuilder("<script>");
-        scriptData.append("\n");
-        scriptData.append("var newWidth = " + widthPixels + ";");
-        scriptData.append("\n");
-        scriptData.append("var images = document.getElementsByTagName('img'); for(var i = 0; i < images.length; i++) { ");
-        scriptData.append("\n");
-        scriptData.append("var originalWidth = images[i].offsetWidth; var originalHeight = images[i].offsetHeight; var proportion = newWidth / originalWidth;");
-        scriptData.append("\n");
-        scriptData.append("var newHeight = originalHeight * proportion;");
-        scriptData.append("\n");
-        scriptData.append("images[i].style.width = newWidth + 'px'; images[i].style.height = newHeight + 'px'; }");
-        scriptData.append("\n");
-        scriptData.append("</script>");
-        scriptData.append("\n");
-
-        htmlData.append(scriptData);
-        htmlData.append("</body>");
-        htmlData.append("\n");
-        htmlData.append("</html>");
-
-        Log.d("BlaBla", scriptData.toString());
-
-        webView.loadData(htmlData.toString(), "text/html; charset=utf-8", "UTF-8");
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
 
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                injectScriptFile(view, "post.js");
+                view.loadUrl("javascript:parse()");
+            }
+
+            private void injectScriptFile(WebView view, String scriptFile) {
+
+                try {
+                    InputStream input = getActivity().getAssets().open(scriptFile);
+                    byte[] buffer = new byte[input.available()];
+                    input.read(buffer);
+                    input.close();
+
+                    // String-ify the script byte-array using BASE64 encoding !!!
+                    String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
+                    view.loadUrl("javascript:(function() {" +
+                            "var parent = document.getElementsByTagName('head').item(0);" +
+                            "var script = document.createElement('script');" +
+                            "script.type = 'text/javascript';" +
+                            // Tell the browser to BASE64-decode the string into your script !!!
+                            "script.innerHTML = window.atob('" + encoded + "');" +
+                            "parent.appendChild(script)" +
+                            "})()");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        webView.loadUrl(getPost().getContent());
     }
 
     private Post getPost() {
