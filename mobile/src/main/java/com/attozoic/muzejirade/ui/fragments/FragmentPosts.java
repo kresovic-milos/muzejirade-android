@@ -75,6 +75,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
 
+                Log.d("BlaBla", "onLoadMore->getPosts");
                 getPosts(((AdapterPosts) view.getAdapter()).getPage());
 
                 if (page == 1) {
@@ -104,6 +105,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         getPosts(adapterPosts.getPage());
+        Log.d("BlaBla", "refresh->getPosts");
     }
 
     private void getPosts(final String page) {
@@ -135,6 +137,7 @@ public class FragmentPosts extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         getPosts(null);
+        Log.d("BlaBla", "onRefresh->getPosts");
     }
 
     public void openPostDetails(Post post, View sharedElement) {

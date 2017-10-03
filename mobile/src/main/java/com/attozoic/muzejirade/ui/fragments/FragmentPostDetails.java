@@ -59,7 +59,6 @@ public class FragmentPostDetails extends BaseFragment {
         webView = (WebView) view.findViewById(R.id.webView_content);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
 
         return view;
     }
@@ -67,45 +66,6 @@ public class FragmentPostDetails extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                injectScriptFile(view, "post.js");
-                view.loadUrl("javascript:parse()");
-            }
-
-            private void injectScriptFile(WebView view, String scriptFile) {
-
-                try {
-                    InputStream input = getActivity().getAssets().open(scriptFile);
-                    byte[] buffer = new byte[input.available()];
-                    input.read(buffer);
-                    input.close();
-
-                    // String-ify the script byte-array using BASE64 encoding !!!
-                    String encoded = Base64.encodeToString(buffer, Base64.NO_WRAP);
-                    view.loadUrl("javascript:(function() {" +
-                            "var parent = document.getElementsByTagName('head').item(0);" +
-                            "var script = document.createElement('script');" +
-                            "script.type = 'text/javascript';" +
-                            // Tell the browser to BASE64-decode the string into your script !!!
-                            "script.innerHTML = window.atob('" + encoded + "');" +
-                            "parent.appendChild(script)" +
-                            "})()");
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         webView.loadUrl(getPost().getContent());
     }
